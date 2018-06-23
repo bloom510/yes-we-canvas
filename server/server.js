@@ -8,7 +8,6 @@ class Server{
     this.app = express();
     this.PORT = process.env.PORT || 8080;
     this.socket = new Socket(this.app, this.PORT)
-    
     this.setup(this.app)
   }
   setup(app){
@@ -27,7 +26,6 @@ class Server{
     this.app.use(cookieParser());
     this.app.use(express.static(path.join(__dirname, '../public')));
     this.app.use(bodyParser.urlencoded({ extended: true }));
-
 
     const indexRouter = require('../routes/index');
     const usersRouter = require('../routes/users');
