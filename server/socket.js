@@ -10,7 +10,11 @@ class Socket {
         this.server.listen(PORT, () => {
             console.log(`app listening on port ${PORT}`)
             this.io.emit('connect');
-            this.io.on('connection', () => console.log('client connected'))
+            this.io.on('connection', () => {
+                console.log('client connected')
+                //event handlers go here
+            })
+
           })
 
         } catch(e) {
