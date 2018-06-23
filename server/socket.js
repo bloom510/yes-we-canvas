@@ -7,7 +7,7 @@ class Socket {
         //Use that server to run Socket.io
         this.io = require('socket.io')(this.server); 
         } catch(e) {
-            console.log(e.stack)
+            console.log('We had trouble creating a Socket connection...', e.stack)
         }
     }
 

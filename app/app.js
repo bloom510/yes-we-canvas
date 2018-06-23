@@ -1,9 +1,10 @@
 
 class Canvas {
-    constructor(width, height) {
+    constructor(width, height, socket) {
         this.global = {}; 
         this.width = width;
         this.height = height;
+        this.socket = socket;
         this.mouse = {
                 down: false,
                 prevX: 0,
@@ -16,13 +17,13 @@ class Canvas {
     }
 
     init(params){
-        //TODO: pass in additional parameters
-
         //Create a canvas
         const canvas = document.createElement('canvas');
         canvas.id = 'canvas';
         canvas.width = this.width;
         canvas.height = this.height;
+        
+        //This must be emitted to the client on init event
         document.body.appendChild(canvas);
 
         //Setup
@@ -32,6 +33,7 @@ class Canvas {
         this.context.lineCap = params.lineCap;
         this.context.lineWidth = params.lineWidth;
 
+        //Will this work without Socket emissions? We will see.
         //Fill background and track mouse
         this.context.fillRect(0, 0, this.width, this.height);
         this.getMousePos();
@@ -93,15 +95,17 @@ class Canvas {
 
 }
 
+module.exports = Canvas;
+
 //onLoad, instantiate a new Canvas and initialize it.
-window.addEventListener('load', () => {
-    const canvas = new Canvas(window.innerWidth, window.innerHeight);
-    canvas.init({
-            strokeStyle: 'white',
-            fillStyle: 'black',
-            lineCap: 'round',
-            lineWidth: '1'
-        }); 
-});
+// window.addEventListener('load', () => {
+//     const canvas = new Canvas(window.innerWidth, window.innerHeight);
+//     canvas.init({
+//             strokeStyle: 'white',
+//             fillStyle: 'black',
+//             lineCap: 'round',
+//             lineWidth: '1'
+//         }); 
+// });
     
           
