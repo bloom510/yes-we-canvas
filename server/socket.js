@@ -1,13 +1,22 @@
 //Socket.io configuration is a bit hard coded for now, can be made more versatile if needed
 class Socket {
-    constructor(server){
+    constructor(app, PORT){
         try{
         //Create a new HTTP Server to run Socket.io
-        this.server = require('http').Server(server); 
+        this.server = require('http').createServer(app); 
         //Use that server to run Socket.io
-        this.io = require('socket.io')(this.server); 
+        this.io = require('socket.io')(this.server) 
+
+        this.server.listen(PORT, () => {
+            console.log(`app listening on port ${PORT}`)
+            
+            this.io.emit('connect');
+            this.io.on('connection', () => console.log('client connected'))
+              
+          })
+
         } catch(e) {
-            console.log('We had trouble creating a Socket connection...', e.stack)
+            console.log(e.stack)
         }
     }
 

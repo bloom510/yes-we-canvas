@@ -1,43 +1,40 @@
+
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-
-const indexRouter = require('../routes/index');
-const usersRouter = require('../routes/users');
-
 const Socket = require('./socket.js')
 const Canvas = require('../app/app.js')
 
 class Server{
   constructor(){
-    this.server = express();
+    this.app = express();
     this.PORT = process.env.PORT || 8080;
-    this.global = {
-      mySocket: new Socket()
-    }
-    this.setup(this.server)
+    this.socket = new Socket(this.app, this.PORT)
+    
+    this.setup(this.app)
   }
-  setup(server){
-    // view engine setup
-    this.server.set('views', path.join(__dirname, '../views'));
-    this.server.set('view engine', 'hbs');
+  setup(app){
 
-    this.server.use(logger('dev'));
-    this.server.use(express.json());
-    this.server.use(express.urlencoded({ extended: false }));
-    this.server.use(cookieParser());
-    this.server.use(express.static(path.join(__dirname, '../public')));
+    const path = require('path');
+    const bodyParser = require("body-parser");
+    const cookieParser = require('cookie-parser');
+   
+    this.app.set('views', path.join(__dirname, '../views'));
+    this.app.set('view engine', 'hbs');
 
-    this.server.use('/', indexRouter);
-    this.server.use('/users', usersRouter);
+    const logger = require('morgan');
+    this.app.use(logger('dev'));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(cookieParser());
+    this.app.use(express.static(path.join(__dirname, '../public')));
+    this.app.use(bodyParser.urlencoded({ extended: true }));
 
-    this.server.listen(this.PORT, () => {
-      console.log(`server listening on port ${this.PORT}`)
-      console.log(new Canvas(550, 400, this.global.mySocket))
-    })
+
+    const indexRouter = require('../routes/index');
+    const usersRouter = require('../routes/users');
+    this.app.use('/', indexRouter);
+    this.app.use('/users', usersRouter);
+  
   }
 }
 
 const server = new Server();
-module.exports = server;
