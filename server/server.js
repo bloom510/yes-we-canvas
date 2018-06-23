@@ -11,7 +11,6 @@ class Server{
     this.setup(this.app)
   }
   setup(app){
-
     const path = require('path');
     const bodyParser = require("body-parser");
     const cookieParser = require('cookie-parser');

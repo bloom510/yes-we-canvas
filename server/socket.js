@@ -6,10 +6,10 @@ class Socket {
         this.server = require('http').createServer(app); 
         //Use that server to run Socket.io
         this.io = require('socket.io')(this.server) 
-
+        
         this.server.listen(PORT, () => {
             console.log(`app listening on port ${PORT}`)
-            
+
             this.io.emit('connect');
             this.io.on('connection', () => console.log('client connected'))
               
