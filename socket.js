@@ -1,5 +1,4 @@
-//Socket.io configuration
-//A bit hard coded for now, can be made more versatile if needed
+//Socket.io configuration is a bit hard coded for now, can be made more versatile if needed
 class Socket {
     constructor(server){
         try{
