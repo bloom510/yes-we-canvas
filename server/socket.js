@@ -13,8 +13,8 @@ class Socket {
     }
     listen(){
         this.io.on('connection', (socket) => { 
-            console.log(data)
             socket.on('ready', (data) => {
+            console.log(data)
             socket.emit('ready', 'hello from the server side!')
             })
         })
