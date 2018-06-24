@@ -3,6 +3,7 @@ const express = require('express');
 const Socket = require('./socket.js')
 const Canvas = require('../app/app.js')
 
+
 class Server{
   constructor(){
     this.app = express();
@@ -35,3 +36,4 @@ class Server{
 }
 
 const server = new Server();
+module.exports = server;

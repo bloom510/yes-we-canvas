@@ -1,4 +1,6 @@
 //Socket.io configuration is a bit hard coded for now, can be made more versatile if needed
+const Canvas = require('../app/app.js')
+
 class Socket {
     constructor(app, PORT){
         this.server = require('http').createServer(app); 
@@ -13,12 +15,10 @@ class Socket {
     }
     activateListeners(){
         this.io.on('connection', (socket) => { 
-
             socket.on('ready', (data) => {
             console.log(data)
             socket.emit('ready', 'hello from the server side!')
             })
-
         })
     }
 

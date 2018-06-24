@@ -1,10 +1,8 @@
-
 class Canvas {
     constructor(width, height, socket) {
         this.global = {}; 
         this.width = width;
         this.height = height;
-        this.socket = socket;
         this.mouse = {
                 down: false,
                 prevX: 0,
@@ -13,30 +11,48 @@ class Canvas {
                 y: 0
             }
         this.context, this.namespace;
+        this.init({
+                        strokeStyle: 'white',
+                        fillStyle: 'black',
+                        lineCap: 'round',
+                        lineWidth: '1'
+                    }); 
   
     }
 
     init(params){
-        //Create a canvas
-        const canvas = document.createElement('canvas');
-        canvas.id = 'canvas';
-        canvas.width = this.width;
-        canvas.height = this.height;
+
+        /*
+        TODO:
+        1. Move all DOM and canvas related operations to the client.js
+        2. Retain all computation on the server in algorithms.js (rename this file)
+        3. Socket flow is as follows: 
+            Client ----------> Server ----------> Client
+            getMousePos() ---> anAlgorithm() ---> draw()
+        */
         
-        //This must be emitted to the client on init event
-        document.body.appendChild(canvas);
-
+        //Create a canvas
+        const createCanvas = () => {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'canvas';
+            canvas.width = this.width;
+            canvas.height = this.height;
+            document.body.appendChild(canvas);
+        }
+       
         //Setup
-        this.context = canvas.getContext('2d');
-        this.context.strokeStyle = params.strokeStyle;
-        this.context.fillStyle = params.fillStyle;
-        this.context.lineCap = params.lineCap;
-        this.context.lineWidth = params.lineWidth;
-
-        //Will this work without Socket emissions? We will see.
-        //Fill background and track mouse
-        this.context.fillRect(0, 0, this.width, this.height);
-        this.getMousePos();
+        const setup = () => {
+            this.context = canvas.getContext('2d');
+            this.context.strokeStyle = params.strokeStyle;
+            this.context.fillStyle = params.fillStyle;
+            this.context.lineCap = params.lineCap;
+            this.context.lineWidth = params.lineWidth;
+        }
+        
+        const setBg = () => {
+            this.context.fillRect(0, 0, this.width, this.height);
+        }
+        // this.getMousePos();
     }
 
     //Cartesian distance formula
