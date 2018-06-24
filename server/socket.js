@@ -8,15 +8,17 @@ class Socket {
     init(PORT){
         this.server.listen(PORT, () => {
             console.log(`app listening on port ${PORT}`)
-            this.listen()
+            this.activateListeners()
         })
     }
-    listen(){
+    activateListeners(){
         this.io.on('connection', (socket) => { 
+
             socket.on('ready', (data) => {
             console.log(data)
             socket.emit('ready', 'hello from the server side!')
             })
+
         })
     }
 
