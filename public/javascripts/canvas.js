@@ -23,15 +23,6 @@ class Canvas {
 
     init(params){
 
-        /*
-        TODO:
-        1. Move all DOM and canvas related operations to the client.js
-        2. Retain all computation on the server in algorithms.js (rename this file)
-        3. Socket flow is as follows: 
-            Client ----------> Server ----------> Client
-            getMousePos() ---> anAlgorithm() ---> draw()
-        */
-        
         //Create a canvas
         const createCanvas = () => {
             const canvas = document.createElement('canvas');
@@ -134,33 +125,13 @@ class Canvas {
         return Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) - Math.pow(y2 - y1, 2)));
     }
 
-
-    //Dummy function to test n-gon generator / sprite system
-    //emits mouse xy coords
     dummyFunc(x, y){ 
         //1. Emit xy coordinates to the server
         this.client.socket.emit('xy', { x, y })
-        //2. Receive back a new Sprite
+        //2. Receives new sprite coordinates
         this.client.socket.on('sprite', (sprite) => {
             this.plotDot(sprite.x, sprite.y, sprite.particles, sprite.radius);
         })
-        //3. draw the Sprite
-      
-
-        // this.global.sprite = new Sprite(this.context, window.mouse.x - 50, window.mouse.y, 50)
     }
 
 }
-
-//onLoad, instantiate a new Canvas and initialize it.
-// window.addEventListener('load', () => {
-//     const canvas = new Canvas(window.innerWidth, window.innerHeight);
-//     canvas.init({
-//             strokeStyle: 'white',
-//             fillStyle: 'black',
-//             lineCap: 'round',
-//             lineWidth: '1'
-//         }); 
-// });
-    
-          
