@@ -70,9 +70,10 @@ class Canvas {
     }
 
     plotDot(x, y, particles, radius) {
+        this.clearPrevious()
           for(let j = 0; j < particles.length; j++){
             this.context.beginPath();
-            this.context.arc(particles[j].x, particles[j].y - radius, 1, 0, Math.PI * 2); //mouse
+            this.context.arc(particles[j].x, particles[j].y - radius, 1, 0, Math.PI * 2); 
             this.context.stroke();
             this.context.closePath();
           }
@@ -115,7 +116,13 @@ class Canvas {
             
         });
     }
-
+    clearPrevious() {
+        this.context.beginPath();
+        this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+        this.context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        this.context.fill()   
+        this.context.closePath();
+    }
     //Draw freehand with the mouse
     paint(coords){
         this.context.lineTo(coords.x, coords.y)
@@ -136,7 +143,6 @@ class Canvas {
         //2. Receive back a new Sprite
         this.client.socket.on('sprite', (sprite) => {
             this.plotDot(sprite.x, sprite.y, sprite.particles, sprite.radius);
-            
         })
         //3. draw the Sprite
       
