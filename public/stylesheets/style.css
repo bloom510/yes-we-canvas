@@ -4,6 +4,7 @@ body {
 
 p {
   position: absolute;
+  padding: 15px;
   color: white;
 }
 
