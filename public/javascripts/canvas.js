@@ -69,15 +69,13 @@ class Canvas {
         this.context.closePath();
     }
 
-    plotDot(x, y) {
-        if(this.global.shape){
-          for(let j = 0; j < this.global.shape.particles.length; j++){
+    plotDot(x, y, particles, radius) {
+          for(let j = 0; j < particles.length; j++){
             this.context.beginPath();
-            this.context.arc(this.global.shape.particles[j].x, this.global.shape.particles[j].y - this.global.shape.radius, 1, 0, Math.PI * 2); //mouse
+            this.context.arc(particles[j].x, particles[j].y - radius, 1, 0, Math.PI * 2); //mouse
             this.context.stroke();
             this.context.closePath();
           }
-        }
       }
 
  
@@ -137,8 +135,7 @@ class Canvas {
         this.client.socket.emit('xy', { x, y })
         //2. Receive back a new Sprite
         this.client.socket.on('sprite', (sprite) => {
-            this.global.shape = sprite;
-            this.plotDot(this.global.shape.x, this.global.shape.y);
+            this.plotDot(sprite.x, sprite.y, sprite.particles, sprite.radius);
             
         })
         //3. draw the Sprite

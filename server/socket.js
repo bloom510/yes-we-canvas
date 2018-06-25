@@ -26,10 +26,10 @@ class Socket {
             socket.on('xy', (data) => {
                 // console.log(data.x, data.y)
                 //create a new sprite
-                let mySprite = new Sprite(data.x, data.y, 50)
+                let sprite = new Sprite(data.x, data.y, 50)
                 
                 //send it back
-                socket.emit('sprite', mySprite)
+                socket.emit('sprite', {x: sprite.x, y: sprite.y, particles: sprite.particles, radius: sprite.radius})
 
                 // socket.emit('sprite', new Sprite(this.context, window.mouse.x - 50, window.mouse.y, 50))
             })
