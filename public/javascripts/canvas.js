@@ -97,6 +97,7 @@ class Canvas {
             this.mouse.x = x;
             this.mouse.y = y;       
             if(this.mouse.down){
+                this.dummyFunc(this.mouse.x, this.mouse.y)  
             //    let scale = this.getDistance(this.mouse.prevX, this.mouse.prevY, x, y);
             //    if(this.global.shape) this.global.shape.updateRadius(scale)
                
