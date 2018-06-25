@@ -83,6 +83,7 @@ class Canvas {
             this.mouse.prevX = x;
             this.mouse.prevY = y;
             this.context.moveTo(x, y)
+            this.dummyFunc(this.mouse.x, this.mouse.y)  
             
         });
 
@@ -98,7 +99,7 @@ class Canvas {
             if(this.mouse.down){
             //    let scale = this.getDistance(this.mouse.prevX, this.mouse.prevY, x, y);
             //    if(this.global.shape) this.global.shape.updateRadius(scale)
-               this.dummyFunc(this.mouse.x, this.mouse.y)  
+               
                 //TODO: have getMousePos consume an action as an argument to perform
                 //      a variety of drawing operations.
                 //
