@@ -1,7 +1,7 @@
 
 const express = require('express');
 const Socket = require('./socket.js')
-const Canvas = require('../app/app.js')
+const Algorithms = require('../app/algorithms.js')
 
 
 class Server{

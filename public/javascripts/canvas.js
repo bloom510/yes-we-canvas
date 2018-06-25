@@ -1,8 +1,9 @@
 class Canvas {
-    constructor(width, height, socket) {
+    constructor(width, height, client) {
         this.global = {}; 
         this.width = width;
         this.height = height;
+        this.client = client;
         this.mouse = {
                 down: false,
                 prevX: 0,
@@ -39,27 +40,47 @@ class Canvas {
             canvas.height = this.height;
             document.body.appendChild(canvas);
         }
+
+        createCanvas();
        
         //Setup
-        const setup = () => {
+        const setup = (params) => {
             this.context = canvas.getContext('2d');
             this.context.strokeStyle = params.strokeStyle;
             this.context.fillStyle = params.fillStyle;
             this.context.lineCap = params.lineCap;
             this.context.lineWidth = params.lineWidth;
         }
+
+        setup(params)
         
         const setBg = () => {
             this.context.fillRect(0, 0, this.width, this.height);
         }
-        // this.getMousePos();
+
+        setBg();
+        this.getMousePos();
     }
 
-    //Cartesian distance formula
-    getDistance(x1, y1, x2, y2) {
-        return Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) - Math.pow(y2 - y1, 2)));
+    drawContainer(){
+        this.context.beginPath();
+        this.context.strokeRect(this.container.startX, this.container.startY, diameter, diameter);
+        this.context.stroke();
+        this.context.closePath();
     }
 
+    plotDot(x, y) {
+        if(this.global.shape){
+          for(let j = 0; j < this.global.shape.particles.length; j++){
+            this.context.beginPath();
+            this.context.arc(this.global.shape.particles[j].x, this.global.shape.particles[j].y - this.global.shape.radius, 1, 0, Math.PI * 2); //mouse
+            this.context.stroke();
+            this.context.closePath();
+          }
+        }
+      }
+
+ 
     getMousePos(){
         const canvas = document.getElementById('canvas')
         const rect = canvas.getBoundingClientRect();
@@ -72,7 +93,7 @@ class Canvas {
             this.mouse.prevX = x;
             this.mouse.prevY = y;
             this.context.moveTo(x, y)
-            this.dummyFunc()
+            
         });
 
         canvas.addEventListener('mouseup', () => {
@@ -83,12 +104,11 @@ class Canvas {
             x = e.clientX - rect.left;
             y = e.clientY - rect.top;
             this.mouse.x = x;
-            this.mouse.y = y;
-            
+            this.mouse.y = y;       
             if(this.mouse.down){
                let scale = this.getDistance(this.mouse.prevX, this.mouse.prevY, x, y);
-               if(this.global.shape) this.global.shape.updateRadius(scale)
-
+            //    if(this.global.shape) this.global.shape.updateRadius(scale)
+               this.dummyFunc(this.mouse.x, this.mouse.y)  
                 //TODO: have getMousePos consume an action as an argument to perform
                 //      a variety of drawing operations.
                 //
@@ -104,14 +124,30 @@ class Canvas {
         this.context.stroke()
     }
 
+    //Cartesian distance formula
+    getDistance(x1, y1, x2, y2) {
+        return Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) - Math.pow(y2 - y1, 2)));
+    }
+
+
     //Dummy function to test n-gon generator / sprite system
-    dummyFunc(x, y){
-        this.global.shape = new Shape(this.context, window.mouse.x - 50, window.mouse.y, 50)
+    //emits mouse xy coords
+    dummyFunc(x, y){ 
+        //1. Emit xy coordinates to the server
+        this.client.socket.emit('xy', { x, y })
+        //2. Receive back a new Sprite
+        this.client.socket.on('sprite', (sprite) => {
+            this.global.shape = sprite;
+            this.plotDot(this.global.shape.x, this.global.shape.y);
+            
+        })
+        //3. draw the Sprite
+      
+
+        // this.global.sprite = new Sprite(this.context, window.mouse.x - 50, window.mouse.y, 50)
     }
 
 }
-
-module.exports = Canvas;
 
 //onLoad, instantiate a new Canvas and initialize it.
 // window.addEventListener('load', () => {

@@ -1,10 +1,12 @@
 //Socket.io configuration is a bit hard coded for now, can be made more versatile if needed
-const Canvas = require('../app/app.js')
+const Algorithms = require('../app/algorithms')
+const Sprite = require('../app/sprite')
 
 class Socket {
     constructor(app, PORT){
         this.server = require('http').createServer(app); 
         this.io = require('socket.io')(this.server) 
+        this.sprites = [];
         this.init(PORT)
     }
     init(PORT){
@@ -15,10 +17,24 @@ class Socket {
     }
     activateListeners(){
         this.io.on('connection', (socket) => { 
+
             socket.on('ready', (data) => {
-            console.log(data)
-            socket.emit('ready', 'hello from the server side!')
+                console.log(data)
+                socket.emit('ready', 'hello from the server side!')
             })
+
+            socket.on('xy', (data) => {
+                // console.log(data.x, data.y)
+                //create a new sprite
+                let mySprite = new Sprite(data.x, data.y, 50)
+                
+                //send it back
+                socket.emit('sprite', mySprite)
+
+                // socket.emit('sprite', new Sprite(this.context, window.mouse.x - 50, window.mouse.y, 50))
+            })
+
+
         })
     }
 

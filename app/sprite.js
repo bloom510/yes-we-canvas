@@ -1,25 +1,18 @@
-
-//Think of clearer namespaces for this object. 
-// Ideas: 
-class Shape { 
-    constructor(context, x, y, radius, name){
-        this.context = context;
-        this.canvas = canvas;
-        this.name = name;
-
+class Sprite { 
+    constructor(x, y, radius){
         //Location of our sprite
         this.x = x;
         this.y = y;
 
-        //Vertices that make up the sprite, if any. Each has their own XY coordinates.
-        this.vertices = [];
+        //Particles that make up the sprite, if any. Each has their own XY coordinates.
+        this.particles = [];
         
         //Circle stuff. Consider namespacing in its own object
         this.radius = 50;
         this.diameter = 100;
 
         //A classic particle. I like to think of them as nodes
-        this.node = function(x, y, radius){
+        this.particle = function(x, y, radius){
                 this.radius = radius;
                 this.diameter = 2*this.radius;
                 this.x = x;
@@ -35,6 +28,8 @@ class Shape {
             startX: 0,
             startY: 0
         }
+
+        this.createPolarSpace(this.radius)
     }
 
     //draws an enclosing box around our circle
@@ -44,21 +39,17 @@ class Shape {
         this.container.height = diameter * 2;
         this.container.startX = window.mouse.x - diameter;
         this.container.startY = window.mouse.y - diameter;
-
-        this.context.beginPath();
-        this.context.strokeRect(this.container.startX, this.container.startY, diameter, diameter);
-        this.context.stroke();
-        this.context.closePath();
+        
     }
 
 
     //Unleashes a specified number of particles acting as nodes of connectivity into polar space
     createPolarSpace(radius){
         //Omitting the deletion of previous data from vertices array (below) makes some cool paintbrush effects
-        this.vertices = [];
+        this.particles = [];
 
-        this.x = window.mouse.x - this.radius;
-        this.y = window.mouse.y; 
+        this.x = this.x - this.radius;
+        // this.y = window.mouse.y; 
 
         for (let i = 0; i < 360; i++) {
             let interval = (Math.PI * 2) / 12;
@@ -67,16 +58,12 @@ class Shape {
             let x = Math.round(this.x + this.radius * Math.cos(radianAngle));
             let y = Math.round(this.y + this.radius * Math.sin(radianAngle));
       
-            let node = new this.node(x, y, radius)
+            let node = new this.particle(x, y, radius)
             this.radius = radius;
-            this.vertices.push(node);
+            this.particles.push(node);
           }
 
-          for(let j = 0; j < this.vertices.length; j++){
-            this.plotDot(this.vertices[j].x, this.vertices[j].y);
-          }
-
-          this.createContainer(this.radius) //input mouse coords instead of radius
+        //   this.createContainer(this.radius) //input mouse coords instead of radius
     }
 
     updateRadius(radius){ 
@@ -99,12 +86,6 @@ class Shape {
         update()
     }
 
-    plotDot(x, y) {
-        this.context.beginPath();
-        this.context.arc(x, y - this.radius, 1, 0, Math.PI * 2); //mouse
-        this.context.stroke();
-        this.context.closePath();
-      }
 
     //A simple centroid finder algorithm. Should be tested on a variety of polygons to determine algorithm choice
     computeCentroid(vertices){
@@ -123,3 +104,5 @@ class Shape {
  
 
 }
+
+module.exports = Sprite;

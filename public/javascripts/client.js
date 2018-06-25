@@ -11,8 +11,10 @@ class Client {
             this.socket.on('ready', (msg) => console.log(msg))
         });
     }
+
 }
 
 window.addEventListener('load', () => {
     const client = new Client();
+    const canvas = new Canvas(window.innerWidth, window.innerHeight, client);
 })
