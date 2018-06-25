@@ -106,7 +106,7 @@ class Canvas {
             this.mouse.x = x;
             this.mouse.y = y;       
             if(this.mouse.down){
-               let scale = this.getDistance(this.mouse.prevX, this.mouse.prevY, x, y);
+            //    let scale = this.getDistance(this.mouse.prevX, this.mouse.prevY, x, y);
             //    if(this.global.shape) this.global.shape.updateRadius(scale)
                this.dummyFunc(this.mouse.x, this.mouse.y)  
                 //TODO: have getMousePos consume an action as an argument to perform
