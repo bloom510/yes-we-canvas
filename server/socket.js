@@ -28,7 +28,7 @@ class Socket {
                 let sprite = new Sprite(data.x, data.y, 50)
                 //send relevant data back for drawing
                 socket.emit('sprite', {x: sprite.x, y: sprite.y, particles: sprite.particles, radius: sprite.radius})
-                sprite = '';
+        
             })
 
         })
